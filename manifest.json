@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+    "name": "Grab Tools",
+    "version": "1.0",
+    "description": "GRAB Tools chrome extension!",
+    "permissions": ["scripting", "activeTab", "contextMenus", "tabs"],
+    "host_permissions": ["https://grab-tools.live/*", "https://grabvr.quest/*"],
+    "content_scripts": [
+        {
+            "matches": ["https://grab-tools.live/*", "https://grabvr.quest/*"],
+            "js": ["script.js"],
+            "css": ["style.css"]
+        }
+    ],
+    "icons": {
+        "16": "icon16.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
+    }
+}

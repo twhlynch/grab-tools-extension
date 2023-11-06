@@ -1,0 +1,21 @@
+.gtl-btn {
+    cursor: pointer;
+    background-color: #5f8cc235;
+    border: solid 2px #4683ce70;
+    text-decoration: none;
+    color: #5b5f64;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px;
+    border-radius: 0.375rem;
+    margin: 0;
+}
+.gtl-buttons {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    padding: 6px;
+}
+.download-button {
+    display: block !important;
+}
