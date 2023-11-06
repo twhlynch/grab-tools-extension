@@ -19,7 +19,7 @@ function grabVRScript() {
         observer.observe(document.body, {childList: true, subtree: true});
     } else if (path === "/levels/viewer" || path === "/levels/viewer/") {
         const levelId = query.split("?level=")[1];
-        document.body.innerHTML += `
+        document.getElementById("buttons").innerHTML += `
             <div class="gtl-buttons">
                 <a class="gtl-btn" target="_blank" href="https://grab-tools.live/editor?level=${levelId}">Edit</a>
                 <a class="gtl-btn" target="_blank" href="https://grab-tools.live/download?level=${levelId}">Download</a>
