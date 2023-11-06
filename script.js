@@ -21,8 +21,8 @@ function grabVRScript() {
         const levelId = query.split("?level=")[1];
         document.body.innerHTML += `
             <div class="gtl-buttons">
-                <a class="gtl-btn" href="https://grab-tools.live/editor?level=${levelId}">Edit</a>
-                <a class="gtl-btn" href="https://grab-tools.live/download?level=${levelId}">Download</a>
+                <a class="gtl-btn" target="_blank" href="https://grab-tools.live/editor?level=${levelId}">Edit</a>
+                <a class="gtl-btn" target="_blank" href="https://grab-tools.live/download?level=${levelId}">Download</a>
             </div>    
         `
     }
@@ -34,8 +34,8 @@ function addButtonsToCard(element) {
     const levelUrl = playButton.getAttribute("href");
     const levelId = levelUrl.split("?level=")[1];
     card.innerHTML += `
-        <a class="gtl-btn" href="https://grab-tools.live/editor?level=${levelId}">Edit</a>
-        <a class="gtl-btn" href="https://grab-tools.live/download?level=${levelId}">Download</a>
+        <a class="gtl-btn" target="_blank" href="https://grab-tools.live/editor?level=${levelId}">Edit</a>
+        <a class="gtl-btn" target="_blank" href="https://grab-tools.live/download?level=${levelId}">Download</a>
     `
 }
 
