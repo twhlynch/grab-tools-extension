@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
-  <app>
-    <updatecheck codebase='https://github.com/twhlynch/grab-tools-extension/releases/latest/download/chrome-extension.crx' version='1.1' />
-  </app>
-</gupdate>

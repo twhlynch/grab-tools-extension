@@ -27,8 +27,4 @@ Adds the following features to level lists in the [level browser](https://grabvr
 - Click 'Load Unpacked'
 - Locate the folder that contains the `manifest.json` file and click 'select folder'
 
-### Option 2
-- Downlaod `chrome-extension.zip` from the [latest release](https://github.com/twhlynch/grab-tools-extension/releases/latest)
-- Unzip it and drag chrome-extension.crx onto the extension manager page
-
 Now navigate to https://grabvr.quest/levels and you will see the buttons added.

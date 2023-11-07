@@ -9,8 +9,19 @@ if (domain === "grab-tools.live") {
     grabVRScript();
 }
 
-function grabToolsScript() {
+async function checkForUpdates() {
+    const version = await fetch('https://grab-tools.live/extensionVersion.json')
+    .then(response => response.json());
 
+    if (version.version !== chrome.runtime.getManifest().version) {
+        document.getElementById("extension-update").style.display = "flex";
+    }
+}
+
+function grabToolsScript() {
+    if (path === "" || path === "/") {
+        checkForUpdates();
+    }
 }
 
 function grabVRScript() {
