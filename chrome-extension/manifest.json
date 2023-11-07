@@ -1,8 +1,9 @@
 {
     "manifest_version": 3,
     "name": "Grab Tools",
-    "version": "1.0",
-    "description": "GRAB Tools chrome extension!",
+    "version": "1.1",
+    "update_url": "https://github.com/twhlynch/grab-tools-extension/blob/master/update.xml",
+    "description": "GRAB Tools extension!",
     "permissions": ["scripting", "activeTab", "contextMenus", "tabs"],
     "host_permissions": ["https://grab-tools.live/*", "https://grabvr.quest/*"],
     "content_scripts": [

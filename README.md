@@ -2,7 +2,7 @@
 
 A chrome extension that ads some useful features to https://grabvr.quest
 
-If you want a Firefox extension.. you can make it yourself, its only 50 lines of code and some config :shrug:
+Firefox extension coming some day.
 
 ## Features
 
