@@ -14,7 +14,7 @@ async function checkForUpdates() {
     .then(response => response.json());
 
     if (version.version !== chrome.runtime.getManifest().version) {
-        document.getElementById("extension-update").style.display = "flex";
+        document.getElementById("extension-update").style.display = "block";
     }
 }
 
