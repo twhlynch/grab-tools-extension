@@ -16,6 +16,19 @@
     bottom: 0;
     padding: 6px;
 }
+.gtl-stats-container {
+    padding-bottom: 15px;
+}
+/* overrides */
 .download-button {
     display: block !important;
+}
+.user-tab-title-container {
+    height: auto !important;
+}
+.user-tab-count {
+    display: none !important;
+}
+.user-tab-name {
+    float: none !important;
 }

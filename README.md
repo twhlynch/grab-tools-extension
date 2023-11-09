@@ -11,10 +11,10 @@ Adds the following features to level lists in the [level browser](https://grabvr
 - Download level button
 - Edit level button
 - Shows the download glTF button
+- view player stats
 
 ### Planned
 - view player cosmetics
-- view player stats
 - view level stats
 
 ## Installation
