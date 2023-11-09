@@ -29,8 +29,13 @@ function grabVRScript() {
         const observer = new MutationObserver(handleMutations);
         observer.observe(document.body, {childList: true, subtree: true});
 
-        if (query.includes("user_id=")) {
-            const userId = query.split("user_id=")[1];
+        if (query.includes("user_id=") || query.includes("tab_my_levels")) {
+            let userId;
+            if (query.includes("tab_my_levels")) {
+                userId = JSON.parse(localStorage.user).user.info.user_id;
+            } else {
+                userId = query.split("user_id=")[1];
+            }
 
             fetch(`https://api.slin.dev/grab/v1/list?max_format_version=100&user_id=${userId}`).then((response) => {
                 return response.json();
