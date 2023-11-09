@@ -140,7 +140,7 @@ function grabVRScript() {
 
 function addButtonsToCard(element) {
     const card = element.childNodes[0];
-    const playButton = card.childNodes[13];
+    const playButton = card.childNodes[card.childNodes.length - 2];
     const levelUrl = playButton.getAttribute("href");
     const levelId = levelUrl.split("?level=")[1];
 
