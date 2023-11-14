@@ -28,7 +28,7 @@ function grabVRScript() {
     if (path === "/levels" || path === "/levels/") {
         const observer = new MutationObserver(handleMutations);
         observer.observe(document.body, {childList: true, subtree: true});
-
+        createColorPicker();
         if (query.includes("user_id=") || query.includes("tab_my_levels")) {
             let userId;
             if (query.includes("tab_my_levels")) {
@@ -99,8 +99,17 @@ function grabVRScript() {
                 complexityResults.classList.add("gtl-stats");
                 complexityResults.textContent = `Complexity: ${total_complexity}`;
 
+                const viewPlayerButton = document.createElement("a");
+                viewPlayerButton.textContent = "View Player";
+                viewPlayerButton.classList.add("gtl-btn");
+                viewPlayerButton.style.float = "right";
+                viewPlayerButton.style.zIndex = "2";
+                viewPlayerButton.setAttribute("target", "_blank");
+                viewPlayerButton.setAttribute("href", `https://eb25ball.github.io/Grab-Player-Viewer/?user_id=${userId}`);
+
                 const stats = document.createElement("div");
                 stats.classList.add("gtl-stats-container");
+                stats.appendChild(viewPlayerButton);
                 stats.appendChild(playResults);
                 stats.appendChild(okPlayResults);
                 stats.appendChild(mapResults);
@@ -171,3 +180,61 @@ function handleMutations(mutations) {
         }
     });
 }
+
+function createColorPicker() {
+    var popupContainer = document.createElement('div');
+    popupContainer.className = 'gtl-popup-container';
+  
+    var colorPicker = document.createElement('input');
+    colorPicker.type = 'color';
+    colorPicker.className = 'gtl-color-picker';
+    
+    var colorPicker2 = document.createElement('input');
+    colorPicker2.type = 'color';
+    colorPicker2.className = 'gtl-color-picker';
+    colorPicker2.style.float = 'right';
+  
+    var sendButton = document.createElement('button');
+    sendButton.textContent = 'Send RGB Values';
+    sendButton.className = 'gtl-btn';
+  
+    popupContainer.appendChild(colorPicker);
+    popupContainer.appendChild(colorPicker2);
+    popupContainer.appendChild(document.createElement('br'));
+    popupContainer.appendChild(sendButton);
+  
+    sendButton.addEventListener('click', function() {
+      var color = colorPicker.value;
+      var color2 = colorPicker2.value;
+      var red = parseInt(color.substring(1, 3), 16) / 255;
+      var green = parseInt(color.substring(3, 5), 16) / 255;
+      var blue = parseInt(color.substring(5, 7), 16) / 255;
+  
+      var red2 = parseInt(color2.substring(1, 3), 16) / 255;
+      var green2 = parseInt(color2.substring(3, 5), 16) / 255;
+      var blue2 = parseInt(color2.substring(5, 7), 16) / 255;
+  
+
+      const requestBody = JSON.parse(localStorage.user).user.info.active_customizations;
+      requestBody.player_color_primary.color = [red, green, blue];
+      requestBody.player_color_secondary.color = [red2, green2, blue2];
+      fetch(`https://api.slin.dev/grab/v1/set_active_customizations?access_token=${JSON.parse(localStorage.user).user.access_token}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      }).then(function(response) {
+        return response;
+      })
+      .then(function(data) {
+        console.log(data);
+      })
+      .catch(function(error) {
+        console.error('Error:', error);
+      });
+      
+    });
+  
+    document.body.appendChild(popupContainer);
+  }

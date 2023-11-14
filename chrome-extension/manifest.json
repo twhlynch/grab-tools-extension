@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Grab Tools",
-    "version": "1.3",
+    "version": "1.4",
     "description": "GRAB Tools extension!",
     "permissions": ["scripting", "activeTab", "contextMenus", "tabs"],
     "host_permissions": ["https://grab-tools.live/*", "https://grabvr.quest/*"],
