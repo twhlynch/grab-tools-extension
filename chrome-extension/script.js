@@ -1,6 +1,8 @@
+const version = "1.5";
 const domain = window.location.hostname;
 const path = window.location.pathname;
 const query = window.location.search;
+let layout = false;
 console.log(`Domain: ${domain}\nPath: ${path}\nQuery: ${query}`);
 
 if (domain === "grab-tools.live") {
@@ -12,7 +14,7 @@ if (domain === "grab-tools.live") {
 function checkForUpdates() {
     fetch('https://grab-tools.live/extensionVersion.json')
     .then(response => response.json()).then(data => {
-        if (data.version !== chrome.runtime.getManifest().version) {
+        if (data.version !== /*chrome.runtime.getManifest().*/version) {
             document.getElementById("extension-update").style.display = "block";
         }
     });
@@ -29,6 +31,45 @@ function grabVRScript() {
         const observer = new MutationObserver(handleMutations);
         observer.observe(document.body, {childList: true, subtree: true});
         createColorPicker();
+        
+        const layoutButton = document.createElement("button");
+        layoutButton.classList.add("gtl-btn");
+        layoutButton.textContent = "Compact Layout";
+        layoutButton.style.position = "absolute";
+        layoutButton.style.top = "150px";
+        layoutButton.style.left = "20px";
+        layoutButton.style.zIndex = "200";
+        layoutButton.style.backgroundColor = "#c3d7e6";
+
+        layoutButton.addEventListener("click", () => {
+            layout = true;
+            document.getElementById("app").style.maxWidth = "100%";
+            let levelGrids = document.getElementsByClassName("grid-container");
+            levelGrids[0].style.gridTemplateColumns = "repeat(auto-fill, minmax(150px, 1fr))";
+            let levelCards = document.getElementsByClassName("level-card");
+            for (let i = 0; i < levelCards.length; i++) {
+                levelCards[i].style.padding = "3% 3% 30px";
+                levelCards[i].style.lineHeight = "20px";
+                levelCards[i].style.left = "3%";
+
+                let children = levelCards[i].childNodes;
+                for (let j = 0; j < children.length; j++) {
+                    let child = children[j];
+                    if ((child.nodeType !== Node.COMMENT_NODE) && ((child.classList && !child.classList.contains("thumbnail") && !child.classList.contains("play-button") && !child.classList.contains("title")) || !child.classList)) {
+                        console.log(child);
+                        child.style.display = "none";
+                    }
+                    if (child.classList && child.classList.contains("play-button")) {
+                        
+                    } else if (child.classList && child.classList.contains("title")) {
+                        child.style.fontSize = "12px";
+                    }
+                }
+            }
+        });
+
+        document.body.appendChild(layoutButton);
+
         if (query.includes("user_id=") || query.includes("tab_my_levels")) {
             let userId;
             if (query.includes("tab_my_levels")) {
@@ -105,7 +146,7 @@ function grabVRScript() {
                 viewPlayerButton.style.float = "right";
                 viewPlayerButton.style.zIndex = "2";
                 viewPlayerButton.setAttribute("target", "_blank");
-                viewPlayerButton.setAttribute("href", `https://eb25ball.github.io/Grab-Player-Viewer/?user_id=${userId}`);
+                viewPlayerButton.setAttribute("href", `https://grabvr.quest/player?user_id=${userId}`);
 
                 const stats = document.createElement("div");
                 stats.classList.add("gtl-stats-container");
@@ -124,13 +165,19 @@ function grabVRScript() {
             });
         }
     } else if (path === "/levels/viewer" || path === "/levels/viewer/") {
-        const levelId = query.split("?level=")[1];
+        const levelId = query.split("?level=")[1].replace("&verify_queue", "");
 
         const editButton = document.createElement("a");
         editButton.classList.add("gtl-btn");
         editButton.setAttribute("target", "_blank");
         editButton.setAttribute("href", `https://grab-tools.live/editor?level=${levelId}`);
-        editButton.textContent = "Edit";
+        editButton.textContent = "Edit JSON";
+        
+        const webEditButton = document.createElement("a");
+        webEditButton.classList.add("gtl-btn");
+        webEditButton.setAttribute("target", "_blank");
+        webEditButton.setAttribute("href", `https://twhlynch.me/grab-web-editor?level=${levelId}`);
+        webEditButton.textContent = "Web Edit";
 
         const downloadButton = document.createElement("a");
         downloadButton.classList.add("gtl-btn");
@@ -140,33 +187,72 @@ function grabVRScript() {
 
         const buttons = document.createElement("div");
         buttons.classList.add("gtl-buttons");
+
+        [downloadButton, webEditButton, editButton].forEach(btn => {
+            btn.style.color = "rgb(42 63 89)";
+        });
+
         buttons.appendChild(editButton);
+        buttons.appendChild(webEditButton);
         buttons.appendChild(downloadButton);
 
-        document.body.appendChild(buttons);
+        document.getElementById("info").prepend(buttons);
+        document.getElementById('download-button').style.display = 'block';
     }
 }
 
 function addButtonsToCard(element) {
     const card = element.childNodes[0];
-    const playButton = card.childNodes[card.childNodes.length - 2];
-    const levelUrl = playButton.getAttribute("href");
-    const levelId = levelUrl.split("?level=")[1];
 
-    const editButton = document.createElement("a");
-    editButton.classList.add("gtl-btn");
-    editButton.setAttribute("target", "_blank");
-    editButton.setAttribute("href", `https://grab-tools.live/editor?level=${levelId}`);
-    editButton.textContent = "Edit";
+    if (!layout) {
+        const playButton = card.childNodes[card.childNodes.length - 2];
+        const levelUrl = playButton.getAttribute("href");
+        const levelId = levelUrl.split("?level=")[1].replace("&verify_queue", "");
+        const detailsUrl = `https://api.slin.dev/grab/v1/details/${levelId.split(":").join("/")}`;
+        
+        const editButton = document.createElement("a");
+        editButton.classList.add("gtl-btn");
+        editButton.setAttribute("target", "_blank");
+        editButton.setAttribute("href", `https://grab-tools.live/editor?level=${levelId}`);
+        editButton.textContent = "Edit JSON";
 
-    const downloadButton = document.createElement("a");
-    downloadButton.classList.add("gtl-btn");
-    downloadButton.setAttribute("target", "_blank");
-    downloadButton.setAttribute("href", `https://grab-tools.live/download?level=${levelId}`);
-    downloadButton.textContent = "Download";
+        const webEditButton = document.createElement("a");
+        webEditButton.classList.add("gtl-btn");
+        webEditButton.setAttribute("target", "_blank");
+        webEditButton.setAttribute("href", `https://twhlynch.me/grab-web-editor?level=${levelId}`);
+        webEditButton.textContent = "Web Edit";
+        
+        const downloadButton = document.createElement("a");
+        downloadButton.classList.add("gtl-btn");
+        downloadButton.setAttribute("target", "_blank");
+        downloadButton.setAttribute("href", `https://grab-tools.live/download?level=${levelId}`);
+        downloadButton.textContent = "Download";
+        
+        card.appendChild(editButton);
+        card.appendChild(downloadButton);
+        card.appendChild(webEditButton);
 
-    card.appendChild(editButton);
-    card.appendChild(downloadButton);
+    } else {
+        let levelGrids = document.getElementsByClassName("grid-container");
+        levelGrids[0].style.gridTemplateColumns = "repeat(auto-fill, minmax(150px, 1fr))";
+        card.style.padding = "3% 3% 30px";
+        card.style.lineHeight = "20px";
+        card.style.left = "3%";
+
+        let children = card.childNodes;
+        for (let j = 0; j < children.length; j++) {
+            let child = children[j];
+            if ((child.nodeType !== Node.COMMENT_NODE) && ((child.classList && !child.classList.contains("thumbnail") && !child.classList.contains("play-button") && !child.classList.contains("title")) || !child.classList)) {
+                console.log(child);
+                child.style.display = "none";
+            }
+            if (child.classList && child.classList.contains("play-button")) {
+                
+            } else if (child.classList && child.classList.contains("title")) {
+                child.style.fontSize = "12px";
+            }
+        }
+    }
 }
 
 function handleMutations(mutations) {
@@ -193,6 +279,15 @@ function createColorPicker() {
     colorPicker2.type = 'color';
     colorPicker2.className = 'gtl-color-picker';
     colorPicker2.style.float = 'right';
+
+    [colorPicker, colorPicker2].forEach(picker => {
+        picker.value = '#010101';
+        picker.addEventListener('change', () => {
+            if (parseInt(picker.value.substring(1, 3), 16) < 6 && parseInt(picker.value.substring(3, 5), 16) < 6 && parseInt(picker.value.substring(5, 7), 16) < 6) {
+                picker.value = '#010101';
+            }
+        });
+    });
   
     var sendButton = document.createElement('button');
     sendButton.textContent = 'Send RGB Values';
@@ -229,6 +324,7 @@ function createColorPicker() {
       })
       .then(function(data) {
         console.log(data);
+        alert('Success!');
       })
       .catch(function(error) {
         console.error('Error:', error);

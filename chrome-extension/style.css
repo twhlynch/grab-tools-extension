@@ -11,10 +11,8 @@
     margin: 3px 3px;
 }
 .gtl-buttons {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    padding: 6px;
+    display: flex;
+    flex-direction: column;
 }
 .gtl-stats-container {
     padding-bottom: 15px;
