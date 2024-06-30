@@ -1,4 +1,4 @@
-const version = "1.5";
+const version = "1.6";
 const domain = window.location.hostname;
 const path = window.location.pathname;
 const query = window.location.search;
@@ -31,12 +31,16 @@ function grabVRScript() {
         const observer = new MutationObserver(handleMutations);
         observer.observe(document.body, {childList: true, subtree: true});
         createColorPicker();
+
+        const customBackground = document.createElement("div");
+        customBackground.classList.add("gtl-bg");
+        document.body.appendChild(customBackground);
         
         const layoutButton = document.createElement("button");
         layoutButton.classList.add("gtl-btn");
         layoutButton.textContent = "Compact Layout";
         layoutButton.style.position = "absolute";
-        layoutButton.style.top = "150px";
+        layoutButton.style.top = "120px";
         layoutButton.style.left = "20px";
         layoutButton.style.zIndex = "200";
         layoutButton.style.backgroundColor = "#c3d7e6";
@@ -140,17 +144,8 @@ function grabVRScript() {
                 complexityResults.classList.add("gtl-stats");
                 complexityResults.textContent = `Complexity: ${total_complexity}`;
 
-                const viewPlayerButton = document.createElement("a");
-                viewPlayerButton.textContent = "View Player";
-                viewPlayerButton.classList.add("gtl-btn");
-                viewPlayerButton.style.float = "right";
-                viewPlayerButton.style.zIndex = "2";
-                viewPlayerButton.setAttribute("target", "_blank");
-                viewPlayerButton.setAttribute("href", `https://grabvr.quest/player?user_id=${userId}`);
-
                 const stats = document.createElement("div");
                 stats.classList.add("gtl-stats-container");
-                stats.appendChild(viewPlayerButton);
                 stats.appendChild(playResults);
                 stats.appendChild(okPlayResults);
                 stats.appendChild(mapResults);
@@ -161,7 +156,7 @@ function grabVRScript() {
                 stats.appendChild(complexityResults);
 
                 const title = document.getElementsByClassName("user-tab-title-container")[0];
-                title.appendChild(stats);
+                title.parentNode.insertBefore(stats, title.nextSibling);
             });
         }
     } else if (path === "/levels/viewer" || path === "/levels/viewer/") {
@@ -172,12 +167,6 @@ function grabVRScript() {
         editButton.setAttribute("target", "_blank");
         editButton.setAttribute("href", `https://grab-tools.live/editor?level=${levelId}`);
         editButton.textContent = "Edit JSON";
-        
-        const webEditButton = document.createElement("a");
-        webEditButton.classList.add("gtl-btn");
-        webEditButton.setAttribute("target", "_blank");
-        webEditButton.setAttribute("href", `https://twhlynch.me/grab-web-editor?level=${levelId}`);
-        webEditButton.textContent = "Web Edit";
 
         const downloadButton = document.createElement("a");
         downloadButton.classList.add("gtl-btn");
@@ -188,12 +177,12 @@ function grabVRScript() {
         const buttons = document.createElement("div");
         buttons.classList.add("gtl-buttons");
 
-        [downloadButton, webEditButton, editButton].forEach(btn => {
+        [downloadButton, editButton].forEach(btn => {
             btn.style.color = "rgb(42 63 89)";
+            btn.style.width = "fit-content";
         });
 
         buttons.appendChild(editButton);
-        buttons.appendChild(webEditButton);
         buttons.appendChild(downloadButton);
 
         document.getElementById("info").prepend(buttons);
@@ -216,12 +205,6 @@ function addButtonsToCard(element) {
         editButton.setAttribute("href", `https://grab-tools.live/editor?level=${levelId}`);
         editButton.textContent = "Edit JSON";
 
-        const webEditButton = document.createElement("a");
-        webEditButton.classList.add("gtl-btn");
-        webEditButton.setAttribute("target", "_blank");
-        webEditButton.setAttribute("href", `https://twhlynch.me/grab-web-editor?level=${levelId}`);
-        webEditButton.textContent = "Web Edit";
-        
         const downloadButton = document.createElement("a");
         downloadButton.classList.add("gtl-btn");
         downloadButton.setAttribute("target", "_blank");
@@ -230,7 +213,6 @@ function addButtonsToCard(element) {
         
         card.appendChild(editButton);
         card.appendChild(downloadButton);
-        card.appendChild(webEditButton);
 
     } else {
         let levelGrids = document.getElementsByClassName("grid-container");
