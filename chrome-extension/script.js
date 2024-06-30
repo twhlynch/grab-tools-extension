@@ -1,13 +1,13 @@
-const version = "1.6";
+const version = '1.6';
 const domain = window.location.hostname;
 const path = window.location.pathname;
 const query = window.location.search;
 let layout = false;
 console.log(`Domain: ${domain}\nPath: ${path}\nQuery: ${query}`);
 
-if (domain === "grab-tools.live") {
+if (domain === 'grab-tools.live') {
     grabToolsScript();
-} else if (domain === "grabvr.quest") {
+} else if (domain === 'grabvr.quest') {
     grabVRScript();
 }
 
@@ -15,58 +15,58 @@ function checkForUpdates() {
     fetch('https://grab-tools.live/extensionVersion.json')
     .then(response => response.json()).then(data => {
         if (data.version !== /*chrome.runtime.getManifest().*/version) {
-            document.getElementById("extension-update").style.display = "block";
+            document.getElementById('extension-update').style.display = 'block';
         }
     });
 }
 
 function grabToolsScript() {
-    if (path === "" || path === "/") {
+    if (path === '' || path === '/') {
         checkForUpdates();
     }
 }
 
 function grabVRScript() {
-    if (path === "/levels" || path === "/levels/") {
+    if (path === '/levels' || path === '/levels/') {
         const observer = new MutationObserver(handleMutations);
         observer.observe(document.body, {childList: true, subtree: true});
         createColorPicker();
 
-        const customBackground = document.createElement("div");
-        customBackground.classList.add("gtl-bg");
+        const customBackground = document.createElement('div');
+        customBackground.classList.add('gtl-bg');
         document.body.appendChild(customBackground);
         
-        const layoutButton = document.createElement("button");
-        layoutButton.classList.add("gtl-btn");
-        layoutButton.textContent = "Compact Layout";
-        layoutButton.style.position = "absolute";
-        layoutButton.style.top = "120px";
-        layoutButton.style.left = "20px";
-        layoutButton.style.zIndex = "200";
-        layoutButton.style.backgroundColor = "#c3d7e6";
+        const layoutButton = document.createElement('button');
+        layoutButton.classList.add('gtl-btn');
+        layoutButton.textContent = 'Compact Layout';
+        layoutButton.style.position = 'absolute';
+        layoutButton.style.top = '120px';
+        layoutButton.style.left = '20px';
+        layoutButton.style.zIndex = '200';
+        layoutButton.style.backgroundColor = '#c3d7e6';
 
-        layoutButton.addEventListener("click", () => {
+        layoutButton.addEventListener('click', () => {
             layout = true;
-            document.getElementById("app").style.maxWidth = "100%";
-            let levelGrids = document.getElementsByClassName("grid-container");
-            levelGrids[0].style.gridTemplateColumns = "repeat(auto-fill, minmax(150px, 1fr))";
-            let levelCards = document.getElementsByClassName("level-card");
+            document.getElementById('app').style.maxWidth = '100%';
+            let levelGrids = document.getElementsByClassName('grid-container');
+            levelGrids[0].style.gridTemplateColumns = 'repeat(auto-fill, minmax(150px, 1fr))';
+            let levelCards = document.getElementsByClassName('level-card');
             for (let i = 0; i < levelCards.length; i++) {
-                levelCards[i].style.padding = "3% 3% 30px";
-                levelCards[i].style.lineHeight = "20px";
-                levelCards[i].style.left = "3%";
+                levelCards[i].style.padding = '3% 3% 30px';
+                levelCards[i].style.lineHeight = '20px';
+                levelCards[i].style.left = '3%';
 
                 let children = levelCards[i].childNodes;
                 for (let j = 0; j < children.length; j++) {
                     let child = children[j];
-                    if ((child.nodeType !== Node.COMMENT_NODE) && ((child.classList && !child.classList.contains("thumbnail") && !child.classList.contains("play-button") && !child.classList.contains("title")) || !child.classList)) {
+                    if ((child.nodeType !== Node.COMMENT_NODE) && ((child.classList && !child.classList.contains('thumbnail') && !child.classList.contains('play-button') && !child.classList.contains('title')) || !child.classList)) {
                         console.log(child);
-                        child.style.display = "none";
+                        child.style.display = 'none';
                     }
-                    if (child.classList && child.classList.contains("play-button")) {
+                    if (child.classList && child.classList.contains('play-button')) {
                         
-                    } else if (child.classList && child.classList.contains("title")) {
-                        child.style.fontSize = "12px";
+                    } else if (child.classList && child.classList.contains('title')) {
+                        child.style.fontSize = '12px';
                     }
                 }
             }
@@ -74,12 +74,12 @@ function grabVRScript() {
 
         document.body.appendChild(layoutButton);
 
-        if (query.includes("user_id=") || query.includes("tab_my_levels")) {
+        if (query.includes('user_id=') || query.includes('tab_my_levels')) {
             let userId;
-            if (query.includes("tab_my_levels")) {
+            if (query.includes('tab_my_levels')) {
                 userId = JSON.parse(localStorage.user).user.info.user_id;
             } else {
-                userId = query.split("user_id=")[1];
+                userId = query.split('user_id=')[1];
             }
 
             fetch(`https://api.slin.dev/grab/v1/list?max_format_version=100&user_id=${userId}`).then((response) => {
@@ -101,8 +101,8 @@ function grabVRScript() {
                 data.forEach(item => {
                     total_maps += 1;
                     item?.statistics?.total_played ? total_plays += item?.statistics?.total_played : null;
-                    item?.tags?.includes("ok") ? total_okplays += item?.statistics?.total_played : null;
-                    item?.tags?.includes("ok") ? total_ok += 1 : null;
+                    item?.tags?.includes('ok') ? total_okplays += item?.statistics?.total_played : null;
+                    item?.tags?.includes('ok') ? total_ok += 1 : null;
                     item?.statistics?.liked ? average_likes += item?.statistics?.liked : null;
                     item?.statistics?.liked ? likes_count += 1 : null;
                     item?.statistics?.difficulty ? average_difficulty += item?.statistics?.difficulty : null;
@@ -112,40 +112,40 @@ function grabVRScript() {
                     item?.complexity ? total_complexity += item?.complexity : null;
                 });
 
-                const playResults = document.createElement("div");
-                playResults.classList.add("gtl-stats");
+                const playResults = document.createElement('div');
+                playResults.classList.add('gtl-stats');
                 playResults.textContent = `Plays: ${total_plays}`;
 
-                const okPlayResults = document.createElement("div");
-                okPlayResults.classList.add("gtl-stats");
+                const okPlayResults = document.createElement('div');
+                okPlayResults.classList.add('gtl-stats');
                 okPlayResults.textContent = `Verified plays: ${total_okplays}`;
 
-                const mapResults = document.createElement("div");
-                mapResults.classList.add("gtl-stats");
+                const mapResults = document.createElement('div');
+                mapResults.classList.add('gtl-stats');
                 mapResults.textContent = `Maps: ${total_maps}`;
 
-                const okResults = document.createElement("div");
-                okResults.classList.add("gtl-stats");
+                const okResults = document.createElement('div');
+                okResults.classList.add('gtl-stats');
                 okResults.textContent = `Verified maps: ${total_ok}`;
 
-                const likesResults = document.createElement("div");
-                likesResults.classList.add("gtl-stats");
+                const likesResults = document.createElement('div');
+                likesResults.classList.add('gtl-stats');
                 likesResults.textContent = `Avg likes: ${Math.round((average_likes * 100) / likes_count)}%`;
 
-                const difficultyResults = document.createElement("div");
-                difficultyResults.classList.add("gtl-stats");
+                const difficultyResults = document.createElement('div');
+                difficultyResults.classList.add('gtl-stats');
                 difficultyResults.textContent = `Avg difficulty: ${Math.round(100 - ((average_difficulty * 100) / difficulty_count))}%`;
 
-                const timeResults = document.createElement("div");
-                timeResults.classList.add("gtl-stats");
+                const timeResults = document.createElement('div');
+                timeResults.classList.add('gtl-stats');
                 timeResults.textContent = `Avg time: ${Math.round(Math.round(average_time / time_count))}s`;
 
-                const complexityResults = document.createElement("div");
-                complexityResults.classList.add("gtl-stats");
+                const complexityResults = document.createElement('div');
+                complexityResults.classList.add('gtl-stats');
                 complexityResults.textContent = `Complexity: ${total_complexity}`;
 
-                const stats = document.createElement("div");
-                stats.classList.add("gtl-stats-container");
+                const stats = document.createElement('div');
+                stats.classList.add('gtl-stats-container');
                 stats.appendChild(playResults);
                 stats.appendChild(okPlayResults);
                 stats.appendChild(mapResults);
@@ -155,37 +155,37 @@ function grabVRScript() {
                 stats.appendChild(timeResults);
                 stats.appendChild(complexityResults);
 
-                const title = document.getElementsByClassName("user-tab-title-container")[0];
+                const title = document.getElementsByClassName('user-tab-title-container')[0];
                 title.parentNode.insertBefore(stats, title.nextSibling);
             });
         }
-    } else if (path === "/levels/viewer" || path === "/levels/viewer/") {
-        const levelId = query.split("?level=")[1].replace("&verify_queue", "");
+    } else if (path === '/levels/viewer' || path === '/levels/viewer/') {
+        const levelId = query.split('?level=')[1].replace('&verify_queue', '');
 
-        const editButton = document.createElement("a");
-        editButton.classList.add("gtl-btn");
-        editButton.setAttribute("target", "_blank");
-        editButton.setAttribute("href", `https://grab-tools.live/editor?level=${levelId}`);
-        editButton.textContent = "Edit JSON";
+        const editButton = document.createElement('a');
+        editButton.classList.add('gtl-btn');
+        editButton.setAttribute('target', '_blank');
+        editButton.setAttribute('href', `https://grab-tools.live/editor?level=${levelId}`);
+        editButton.textContent = 'Edit JSON';
 
-        const downloadButton = document.createElement("a");
-        downloadButton.classList.add("gtl-btn");
-        downloadButton.setAttribute("target", "_blank");
-        downloadButton.setAttribute("href", `https://grab-tools.live/download?level=${levelId}`);
-        downloadButton.textContent = "Download";
+        const downloadButton = document.createElement('a');
+        downloadButton.classList.add('gtl-btn');
+        downloadButton.setAttribute('target', '_blank');
+        downloadButton.setAttribute('href', `https://grab-tools.live/download?level=${levelId}`);
+        downloadButton.textContent = 'Download';
 
-        const buttons = document.createElement("div");
-        buttons.classList.add("gtl-buttons");
+        const buttons = document.createElement('div');
+        buttons.classList.add('gtl-buttons');
 
         [downloadButton, editButton].forEach(btn => {
-            btn.style.color = "rgb(42 63 89)";
-            btn.style.width = "fit-content";
+            btn.style.color = 'rgb(42 63 89)';
+            btn.style.width = 'fit-content';
         });
 
         buttons.appendChild(editButton);
         buttons.appendChild(downloadButton);
 
-        document.getElementById("info").prepend(buttons);
+        document.getElementById('info').prepend(buttons);
         document.getElementById('download-button').style.display = 'block';
     }
 }
@@ -195,43 +195,43 @@ function addButtonsToCard(element) {
 
     if (!layout) {
         const playButton = card.childNodes[card.childNodes.length - 2];
-        const levelUrl = playButton.getAttribute("href");
-        const levelId = levelUrl.split("?level=")[1].replace("&verify_queue", "");
-        const detailsUrl = `https://api.slin.dev/grab/v1/details/${levelId.split(":").join("/")}`;
+        const levelUrl = playButton.getAttribute('href');
+        const levelId = levelUrl.split('?level=')[1].replace('&verify_queue', '');
+        const detailsUrl = `https://api.slin.dev/grab/v1/details/${levelId.split(':').join('/')}`;
         
-        const editButton = document.createElement("a");
-        editButton.classList.add("gtl-btn");
-        editButton.setAttribute("target", "_blank");
-        editButton.setAttribute("href", `https://grab-tools.live/editor?level=${levelId}`);
-        editButton.textContent = "Edit JSON";
+        const editButton = document.createElement('a');
+        editButton.classList.add('gtl-btn');
+        editButton.setAttribute('target', '_blank');
+        editButton.setAttribute('href', `https://grab-tools.live/editor?level=${levelId}`);
+        editButton.textContent = 'Edit JSON';
 
-        const downloadButton = document.createElement("a");
-        downloadButton.classList.add("gtl-btn");
-        downloadButton.setAttribute("target", "_blank");
-        downloadButton.setAttribute("href", `https://grab-tools.live/download?level=${levelId}`);
-        downloadButton.textContent = "Download";
+        const downloadButton = document.createElement('a');
+        downloadButton.classList.add('gtl-btn');
+        downloadButton.setAttribute('target', '_blank');
+        downloadButton.setAttribute('href', `https://grab-tools.live/download?level=${levelId}`);
+        downloadButton.textContent = 'Download';
         
         card.appendChild(editButton);
         card.appendChild(downloadButton);
 
     } else {
-        let levelGrids = document.getElementsByClassName("grid-container");
-        levelGrids[0].style.gridTemplateColumns = "repeat(auto-fill, minmax(150px, 1fr))";
-        card.style.padding = "3% 3% 30px";
-        card.style.lineHeight = "20px";
-        card.style.left = "3%";
+        let levelGrids = document.getElementsByClassName('grid-container');
+        levelGrids[0].style.gridTemplateColumns = 'repeat(auto-fill, minmax(150px, 1fr))';
+        card.style.padding = '3% 3% 30px';
+        card.style.lineHeight = '20px';
+        card.style.left = '3%';
 
         let children = card.childNodes;
         for (let j = 0; j < children.length; j++) {
             let child = children[j];
-            if ((child.nodeType !== Node.COMMENT_NODE) && ((child.classList && !child.classList.contains("thumbnail") && !child.classList.contains("play-button") && !child.classList.contains("title")) || !child.classList)) {
+            if ((child.nodeType !== Node.COMMENT_NODE) && ((child.classList && !child.classList.contains('thumbnail') && !child.classList.contains('play-button') && !child.classList.contains('title')) || !child.classList)) {
                 console.log(child);
-                child.style.display = "none";
+                child.style.display = 'none';
             }
-            if (child.classList && child.classList.contains("play-button")) {
+            if (child.classList && child.classList.contains('play-button')) {
                 
-            } else if (child.classList && child.classList.contains("title")) {
-                child.style.fontSize = "12px";
+            } else if (child.classList && child.classList.contains('title')) {
+                child.style.fontSize = '12px';
             }
         }
     }
@@ -239,9 +239,9 @@ function addButtonsToCard(element) {
 
 function handleMutations(mutations) {
     mutations.forEach(function (mutation) {
-        if (mutation.type === "childList") {
+        if (mutation.type === 'childList') {
             mutation.addedNodes.forEach(function (node) {
-                if (node.classList && node.classList.contains("grid-item")) {
+                if (node.classList && node.classList.contains('grid-item')) {
                     addButtonsToCard(node);
                 }
             });
