@@ -28,7 +28,7 @@
 }
 .gtl-popup-container {
     position: absolute;
-    top: 0;
+    top: 100px;
     left: 0;
     padding: 10px;
     z-index: 9999;
